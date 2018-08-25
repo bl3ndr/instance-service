@@ -1,4 +1,4 @@
-package com.kyzrlabs.bl3nd.instanceservice
+package com.kyzrlabs.bl3ndr.instanceservice
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service

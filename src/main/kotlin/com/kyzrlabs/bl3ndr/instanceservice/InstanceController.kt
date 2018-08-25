@@ -1,4 +1,4 @@
-package com.kyzrlabs.bl3nd.instanceservice
+package com.kyzrlabs.bl3ndr.instanceservice
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo
@@ -16,17 +16,13 @@ import java.util.*
 
 
 @RestController
+@CrossOrigin
 @RequestMapping("public/instance")
 class InstanceController: HALReady<Instance> {
 
     @Autowired
     private lateinit var instanceService: InstanceService
 
-
-    @GetMapping(value = "/stream", produces = [TEXT_EVENT_STREAM_VALUE])
-    fun stream(): Flux<Instance> {
-        return instanceService.listAll().map(this::addHATEOAS)
-    }
 
     @GetMapping
     fun list(): Flux<Instance> {
@@ -48,8 +44,7 @@ class InstanceController: HALReady<Instance> {
     @PostMapping
     fun create(@RequestBody instance: Instance): Mono<Instance>{
         instance.dateCreated = Date.from(ZonedDateTime.now(ZoneId.of("UTC")).toInstant())
-        instance.id = String.generateHash()
-        return instanceService.save(this.addHATEOAS(instance))
+        return instanceService.save(instance).map(this::addHATEOAS)
     }
 
 
@@ -58,7 +53,6 @@ class InstanceController: HALReady<Instance> {
         return instanceService.getById(id)
                 .map(this::addHATEOAS)
                 .flatMap {
-                    instance.dateUpdated = Date.from(ZonedDateTime.now(ZoneId.of("UTC")).toInstant())
                     instanceService.save(instance)
                 }
                 .map { updatedInstance -> ResponseEntity(updatedInstance, HttpStatus.OK) }
@@ -80,21 +74,12 @@ class InstanceController: HALReady<Instance> {
     @Autowired
     private lateinit var instanceAssetService: InstanceAssetService
 
-    @GetMapping(value = "/asset/stream", produces = [MediaType.TEXT_EVENT_STREAM_VALUE])
-    fun stream(@PathVariable id: String): Flux<Asset> {
-        return instanceAssetService.getAssetsForInstance(id).map{ asset ->
-            asset.add(linkTo(methodOn(InstanceAssetController::class.java).get(asset.id)).withSelfRel())
-            asset.add(linkTo(methodOn(InstanceAssetController::class.java).delete(asset.id)).withSelfRel())
-            asset
-        }
-    }
-
     @GetMapping("/{id}/asset")
     fun getAssets(@PathVariable id: String): Flux<Asset> {
         return instanceAssetService.getAssetsForInstance(id);
     }
 
-    override fun addHATEOAS(instance: Instance): Instance{
+    override fun addHATEOAS(instance: Instance): Instance {
         instance.add(linkTo(methodOn(InstanceController::class.java).delete(instance.id!!)).withSelfRel().withType("delete"))
         instance.add(linkTo(methodOn(InstanceController::class.java).get(instance.id!!)).withSelfRel())
         instance.add(linkTo(methodOn(InstanceController::class.java).getAssets(instance.id!!)).withRel("instance.asset"))

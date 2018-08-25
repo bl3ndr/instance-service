@@ -1,4 +1,4 @@
-package com.kyzrlabs.bl3nd.instanceservice
+package com.kyzrlabs.bl3ndr.instanceservice
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.hateoas.mvc.ControllerLinkBuilder
@@ -10,6 +10,7 @@ import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
 @RestController
+@CrossOrigin
 @RequestMapping("public/instance/{id}/asset")
 class InstanceAssetController : HALReady<Asset> {
 

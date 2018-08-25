@@ -1,4 +1,4 @@
-package com.kyzrlabs.bl3nd.instanceservice
+package com.kyzrlabs.bl3ndr.instanceservice
 
 import org.springframework.data.annotation.Id
 import org.springframework.data.annotation.TypeAlias

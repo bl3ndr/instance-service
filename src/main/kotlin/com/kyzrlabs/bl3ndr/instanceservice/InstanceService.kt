@@ -1,9 +1,10 @@
-package com.kyzrlabs.bl3nd.instanceservice
+package com.kyzrlabs.bl3ndr.instanceservice
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
+import java.time.Duration
 
 
 interface InstanceService {
@@ -17,6 +18,7 @@ interface InstanceService {
     fun save(instance: Instance): Mono<Instance>
 
     fun delete(instance: Instance): Mono<Void>
+
 }
 
 @Service("instanceService")
@@ -38,7 +40,10 @@ class InstanceServiceImpl : InstanceService {
     }
 
     override fun save(instance: Instance): Mono<Instance> {
-        return instanceRepository.save(instance)
+        if(instance.id.equals("")) throw IllegalArgumentException("No id provided")
+        var i: Mono<Instance> = instanceRepository.save(instance)
+
+        return i;
     }
 
     override fun delete(instance: Instance): Mono<Void> {

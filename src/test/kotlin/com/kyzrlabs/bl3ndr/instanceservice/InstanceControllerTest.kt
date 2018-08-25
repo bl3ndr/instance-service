@@ -1,4 +1,4 @@
-package com.kyzrlabs.bl3nd.instanceservice
+package com.kyzrlabs.bl3ndr.instanceservice
 
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -28,6 +28,9 @@ internal class InstanceControllerTest {
 
     @MockBean
     private lateinit var instanceService: InstanceService
+
+    @MockBean
+    private lateinit var assetService: InstanceAssetService
 
     @org.junit.jupiter.api.BeforeEach
     fun setUp() {
@@ -128,7 +131,7 @@ internal class InstanceControllerTest {
         val date: Date = Date.from(ZonedDateTime.now().toInstant())
         val savedInstance = Instance("1", date, date, date, date, "Title")
 
-        BDDMockito.given(instanceService.save(any(Instance::class.java)))
+        BDDMockito.given(instanceService.save(mockInstance))
                 .willReturn(Mono.just(savedInstance))
 
         //when
