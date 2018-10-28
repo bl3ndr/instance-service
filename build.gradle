@@ -61,4 +61,8 @@ dependencies {
 	testCompile("org.jetbrains.kotlin:kotlin-test-junit:${kotlinVersion}")
 	testCompile("org.junit.jupiter:junit-jupiter-api")
 	testRuntime("org.junit.jupiter:junit-jupiter-engine")
+
+	//auth-service
+	// https://mvnrepository.com/artifact/org.bouncycastle/bcprov-jdk16
+	compile group: 'org.bouncycastle', name: 'bcprov-jdk16', version: '1.45'
 }

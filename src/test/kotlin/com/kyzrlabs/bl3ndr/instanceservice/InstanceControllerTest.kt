@@ -2,7 +2,6 @@ package com.kyzrlabs.bl3ndr.instanceservice
 
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.ArgumentMatchers.any
 import org.mockito.ArgumentMatchers.anyString
 import org.mockito.BDDMockito
 import org.springframework.beans.factory.annotation.Autowired
@@ -21,7 +20,7 @@ import java.util.*
 @WebFluxTest(InstanceController::class)
 internal class InstanceControllerTest {
 
-    val API_PATH: String = "/public/instances"
+    val API_PATH: String = "/public/instance"
 
     @Autowired
     lateinit var webTestClient: WebTestClient
